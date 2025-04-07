@@ -50,41 +50,57 @@ def decompresser():
     if not dossier_sortie:
         return
 
-    def run_extract():
+    def preview_files():
+        # Ouvrir une fenêtre popup avec la liste des fichiers dans l'archive
+        popup = tk.Toplevel(app)
+        popup.title("Contenu de l'archive")
+        popup.geometry("300x200")
+
+        # Liste des fichiers
+        listbox = tk.Listbox(popup)
+        listbox.pack(fill="both", expand=True)
+
         try:
-            progress["value"] = 0
             if fichier.endswith(".zip"):
                 with zipfile.ZipFile(fichier, 'r') as zipf:
                     liste = zipf.namelist()
-                    progress["maximum"] = len(liste)
-                    for i, name in enumerate(liste):
-                        zipf.extract(name, dossier_sortie)
-                        progress["value"] = i + 1
-                        time.sleep(0.01)
             elif fichier.endswith(".rar"):
                 with rarfile.RarFile(fichier) as rf:
                     liste = rf.namelist()
-                    progress["maximum"] = len(liste)
-                    for i, name in enumerate(liste):
-                        rf.extract(name, path=dossier_sortie)
-                        progress["value"] = i + 1
-                        time.sleep(0.01)
             else:
                 messagebox.showerror("Erreur", "Format non supporté.")
                 return
 
-            messagebox.showinfo("Succès", f"Fichier décompressé dans :\n{dossier_sortie}")
-            progress["value"] = 0
-        except Exception as e:
-            messagebox.showerror("Erreur", f"Échec de la décompression :\n{e}")
-            progress["value"] = 0
+            for name in liste:
+                listbox.insert(tk.END, name)
 
-    threading.Thread(target=run_extract).start()
+            def extraire():
+                try:
+                    if fichier.endswith(".zip"):
+                        with zipfile.ZipFile(fichier, 'r') as zipf:
+                            zipf.extractall(dossier_sortie)
+                    elif fichier.endswith(".rar"):
+                        with rarfile.RarFile(fichier) as rf:
+                            rf.extractall(dossier_sortie)
+
+                    messagebox.showinfo("Succès", f"Fichier décompressé dans :\n{dossier_sortie}")
+                    popup.destroy()
+                except Exception as e:
+                    messagebox.showerror("Erreur", f"Échec de la décompression :\n{e}")
+                    popup.destroy()
+
+            btn_extraire = tk.Button(popup, text="Extraire", command=extraire)
+            btn_extraire.pack(pady=10)
+
+        except Exception as e:
+            messagebox.showerror("Erreur", f"Impossible d'ouvrir l'archive :\n{e}")
+
+    preview_files()
 
 # Interface principale
 app = tk.Tk()
 app.title("MiniWinRAR")
-app.geometry("350x200")
+app.geometry("350x250")
 
 btn_zip = tk.Button(app, text="Compresser un dossier (ZIP)", command=compresser_zip)
 btn_zip.pack(pady=10)
