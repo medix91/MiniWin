@@ -1,0 +1,22 @@
+# Environnement virtuel
+env/
+venv/
+.venv/
+
+# Fichiers Python compilés
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Fichiers de log ou temporaires
+*.log
+*.tmp
+
+# Fichiers générés par l'OS
+.DS_Store
+Thumbs.db
+
+# Fichiers spécifiques à l'IDE
+.vscode/
+.idea/
+*.swp
