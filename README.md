@@ -1,6 +1,6 @@
 # MiniWinRAR
 
-MiniWinRAR est une petite application Python avec interface graphique (Tkinter) qui permet de **compresser** des dossiers au format ZIP et **décompresser** des fichiers ZIP ou RAR.
+MiniWinRAR est une petite application Python avec interface (Tkinter) qui permet de **compresser** des dossiers au format ZIP et **décompresser** des fichiers ZIP ou RAR.
 
 ---
 
